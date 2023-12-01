@@ -1,0 +1,207 @@
+{% extends "layouts/base.html" %}
+
+{% load custom_tags %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+
+    <div class="py-4">
+        <div class="dropdown">
+            
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card bg-yellow-100 border-0 shadow">
+                <div class="card-header d-sm-flex flex-row align-items-center flex-0">
+                    <div class="d-block mb-3 mb-sm-0">
+                        <div class="fs-5 fw-normal mb-2">Your Current Holdings</div>
+
+                        <div class="card card-body border-0 shadow table-wrapper table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="border-gray-200">Stock Name</th>
+                                        <th class="border-gray-200">Quantity</th>						
+                                        <th class="border-gray-200">LTP</th>
+                                        <th class="border-gray-200">Current Value</th>
+                                        <th class="border-gray-200">Buy Value</th>
+                                        <th class="border-gray-200">Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holding in holdings %}
+                                        
+                                         <tr>
+                                           
+                                            <td><span class="fw-normal">{{ holding.stock_Name  }}</span></td>                        
+                                            <td><span class="fw-normal">{{ holding.quantity }}</span></td>
+                                            <td><span class="fw-normal">{{ holding.ltp }}</span></td>
+                                            <td><span class="fw-normal">{{ holding.total }}</span></td>
+                                            <td><span class="fw-normal">{{ buyvaluemap|get_item:holding.stock_Name}}</span></td>
+                                            <td><span class="fw-normal">{{ profitmap|get_item:holding.stock_Name}}</span></td>
+                                         </tr>
+                                    {% endfor %}     
+                                </tbody>  
+                            </table>              
+                        
+
+                    </div>
+                   
+                </div>
+                
+            </div>
+        </div>
+        <div class="py-4">
+            <div class="dropdown">
+                
+                
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            
+                <div class="card border-0 shadow"> 
+                    
+                    <div class="card-body p-2">
+                        <div>
+                            <canvas id="myChart"></canvas>
+                          </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+    <!--
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card border-0 shadow">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2 class="fs-5 fw-bold mb-0">Page visits</h2>
+                                </div>
+                                <div class="col text-end">
+                                    <a href="#" class="btn btn-sm btn-primary">See all</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-items-center table-flush">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th class="border-bottom" scope="col">Page name</th>
+                                    <th class="border-bottom" scope="col">Page Views</th>
+                                    <th class="border-bottom" scope="col">Page Value</th>
+                                    <th class="border-bottom" scope="col">Bounce rate</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th class="text-gray-900" scope="row">
+                                        /demo/admin/index.html
+                                    </th>
+                                    <td class="fw-bolder text-gray-500">
+                                        3,225
+                                    </td>
+                                    <td class="fw-bolder text-gray-500">
+                                        $20
+                                    </td>
+                                    <td class="fw-bolder text-gray-500">
+                                        <div class="d-flex">
+                                            <svg class="icon icon-xs text-danger me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                                            42,55%
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-gray-900" scope="row">
+                                        /demo/admin/forms.html
+                                    </th>
+                                    <td class="fw-bolder text-gray-500">
+                                        2,987
+                                    </td>
+                                    <td class="fw-bolder text-gray-500">
+                                        0
+                                    </td>
+                                    <td class="fw-bolder text-gray-500">
+                                        <div class="d-flex">
+                                            <svg class="icon icon-xs text-success me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                            43,24%
+                                        </div>
+                                    </td>
+                                </tr>
+                               
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+        <div class="col-12 col-xl-4">
+            <div class="col-12 px-0 mb-4">
+                <div class="card border-0 shadow">
+                    
+                    <div class="card-body p-2">
+                        <div>
+                            <canvas id="myChart"></canvas>
+                          </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        window.onload = function () {
+            
+            const ctx = document.getElementById('myChart');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                  labels: [{% for holding in holdings %} '{{ holding.stock_Name  }}', {% endfor %}],
+                  datasets: [{
+                    label: 'Portfolio Value in INR',
+                    data: [{% for holding in holdings %} '{{ holding.total  }}', {% endfor %}],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  scales: {
+                    
+                  }
+                }
+            });
+            
+        }
+
+    </script>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+
+
+
+{% block javascripts %}{% endblock javascripts %}
+
+
+  

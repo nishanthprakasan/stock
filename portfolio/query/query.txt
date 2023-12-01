@@ -1,0 +1,53 @@
+Create view public.home_holdingsview as
+select auth_user.username, "stock_Name", sum(quantity) as quantity  
+from public.home_transaction,public.auth_user,public.home_companyprofile 
+where auth_user.id = home_transaction.user_id 
+and home_companyprofile.id = "home_transaction"."stock_Name_id"
+group by username, "stock_Name";
+
+
+
+drop view public.home_holdingsview
+Create view public.home_holdingsview as
+select  row_number() OVER () as id,
+user_id, "stock_Name_id"
+, sum(quantity) as quantity  
+from public.home_transaction
+--where auth_user.id = home_transaction.user_id 
+--and home_companyprofile.id = "home_transaction"."stock_Name_id"
+group by user_id
+, "stock_Name_id";
+
+
+
+drop view public.home_holdingsview
+Create view public.home_holdingsview as
+select  row_number() OVER () as id,
+user_id, "home_transaction"."stock_Name_id",ltp
+, sum(quantity) as quantity  
+from public.home_transaction,public.home_companyprice
+where "home_transaction"."stock_Name_id" = "home_companyprice"."stock_Name_id"
+--and home_companyprofile.id = "home_transaction"."stock_Name_id"
+group by user_id, "home_transaction"."stock_Name_id",ltp
+
+
+
+-- PROCEDURE: public.stockportfolio()
+
+-- DROP PROCEDURE IF EXISTS public.stockportfolio();
+
+CREATE OR REPLACE PROCEDURE public.stockportfolio(username varchar(30)
+	)
+LANGUAGE 'sql'
+AS $BODY$
+	
+	select "stock_Name_id", sum(quantity) as quantity
+	--, LTP,round((getTotal(-sum(quantity)*LTP)), 2) as current_value,
+	--capGain(round((getTotal(-sum(quantity)*LTP)) - (getTotal(sum(quantity)*rate)), 2), transaction_date) as profit_loss
+	from home_transaction T
+	group by "stock_Name_id";
+
+
+$BODY$;
+ALTER PROCEDURE public.stockportfolio()
+    OWNER TO postgres;

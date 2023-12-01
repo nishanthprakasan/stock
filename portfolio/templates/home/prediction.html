@@ -1,0 +1,105 @@
+{% extends "layouts/base.html" %}
+{% load custom_tags %}
+
+{% block title %} Stock Prediction {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="py-4">
+    <div class="dropdown">
+        
+        
+    </div>
+</div>
+
+<div class="container">
+
+
+     
+    <div class="row">
+      <div class="col">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.stockname | as_crispy_field }}
+            <button type="submit" class="btn btn-success" onclick="printmessage()">Submit</button>
+            
+            
+        </form>    
+      </div>
+      <div class="col-8">
+      
+            {% if msg %}
+        
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+
+            {% else %}
+
+                <script:printmessage() >
+        
+            {% endif %}
+
+            <div id="wait">
+                <p> Please wait while the stock predction is caculated. This will take some time... </p>
+            </div>
+
+
+      </div>
+      <div class="col-2">
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+        window.onload = function () {
+                document.getElementById('wait').style.display='none';
+                const xValues = [0,50,100,150,200,250,300,350,400];
+
+                new Chart("myChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{ 
+                    data: [{% for i in actual %} '{{ i }}', {% endfor %} ],
+                    borderColor: "green",
+                    fill: true
+                    }, { 
+                    data: [{% for i in prediction %} '{{ i|get_listitem }}', {% endfor %}  ],
+                    borderColor: "blue",
+                    fill: true
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false,
+                        legendText : ['Current','Vs last week/month/year']
+                    },
+                    title: {
+                        display: true,
+                        text: "Stock Prediction Results.          Green = Predicted Value               Blue = Actual Value"
+                    }
+                    
+                }
+                });
+        }
+       
+        function printmessage(){
+            document.getElementById('myChart').style.display='none';
+            document.getElementById('wait').style.display='inline';
+        }
+
+    </script>
+      
+    </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+
+
+{% block javascripts %}{% endblock javascripts %}
